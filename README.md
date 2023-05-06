@@ -30,3 +30,6 @@
 * * * * * ( sleep 50 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
 ```
 - Disable SSH
+
+# Disclaimer:
+I will not responsible for any damage or loss of data that may occur as a result of following these instructions
