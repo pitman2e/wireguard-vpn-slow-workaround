@@ -1,0 +1,1 @@
+# surfshark-wireguard-slow-workaround
