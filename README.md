@@ -20,14 +20,12 @@
 # Workaround
 - Enable SSH
 - Crontab -e
-- Add the following to workaround the NAT acceleration problem? (Reset the conntrack table of the Wireguard connection every 10 seconds, replace 192.168.1.10 to your computer static ip)
+- Add the following to workaround the NAT acceleration problem? (Check and Reset the conntrack table of the Wireguard connection if more than 2 recordsevery 15 seconds, replace 192.168.1.10 to your computer static ip)
 ```
-* * * * * ( sleep  0 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
-* * * * * ( sleep 10 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
-* * * * * ( sleep 20 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
-* * * * * ( sleep 30 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
-* * * * * ( sleep 40 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
-* * * * * ( sleep 50 ; conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820 )
+* * * * * ( sleep  0 ; if [ $(conntrack -L -p udp -s 192.168.1.10 --dport 51820 | wc -l) -gt "1" ]; then conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi )
+* * * * * ( sleep 15 ; if [ $(conntrack -L -p udp -s 192.168.1.10 --dport 51820 | wc -l) -gt "1" ]; then conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi )
+* * * * * ( sleep 30 ; if [ $(conntrack -L -p udp -s 192.168.1.10 --dport 51820 | wc -l) -gt "1" ]; then conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi )
+* * * * * ( sleep 45 ; if [ $(conntrack -L -p udp -s 192.168.1.10 --dport 51820 | wc -l) -gt "1" ]; then conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi )
 ```
 - Disable SSH
 
