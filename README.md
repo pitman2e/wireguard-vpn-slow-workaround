@@ -31,5 +31,5 @@
 ```
 - Disable SSH
 
-# Disclaimer:
+# Disclaimer
 I will not responsible for any damage or loss of data that may occur as a result of following these instructions
