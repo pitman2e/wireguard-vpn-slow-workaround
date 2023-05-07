@@ -20,7 +20,9 @@
 # Workaround 1
 - Enable SSH
 - Crontab -e
+```
 * * * * * ( conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi ) # Probably will cause packet loss every minute
+```
 - Disable SSH
 
 # Workaround 2 (Sometimes it does not work) 
