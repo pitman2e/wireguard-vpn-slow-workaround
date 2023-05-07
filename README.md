@@ -17,7 +17,13 @@
 ## Windows 10
 - Cannot reproduce the problem using official client
 
-# Workaround
+# Workaround 1
+- Enable SSH
+- Crontab -e
+* * * * * ( conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi ) # Probably will cause packet loss every minute
+- Disable SSH
+
+# Workaround 2 (Sometimes it does not work) 
 - Enable SSH
 - Crontab -e
 - Add the following to workaround the NAT acceleration problem? (Check and Reset the conntrack table of the Wireguard connection if more than 2 recordsevery 15 seconds, replace 192.168.1.10 to your computer static ip)
@@ -28,6 +34,23 @@
 * * * * * ( sleep 45 ; if [ $(conntrack -L -p udp -s 192.168.1.10 --dport 51820 | wc -l) -gt "1" ]; then conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820; fi )
 ```
 - Disable SSH
+
+# Workaround 3 (For Network Manager only)
+- Set SSH login with key-pair
+- Create `\etc\NetworkManager\dispatcher.d\99-wireguard-nat-workaround.sh` with proper permission, with content like:
+```
+#!/usr/bin/python3
+import subprocess
+import sys
+import time
+
+inf = sys.argv[1] #Network Interface (eg: eth0)
+netevent = sys.argv[2] #Event (eg: up, pre-up)
+
+if (sys.argv[1].startswith("wireguard_") and netevent == "up"):
+    time.sleep(5)
+    subprocess.call(["ssh", "-i", "/my/ssh/privatekey", "routeruser@192.168.1.1", "-t","-o", "StrictHostKeyChecking no", "conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820;"])
+```
 
 # Disclaimer
 I will not responsible for any damage or loss of data that may occur as a result of following these instructions
