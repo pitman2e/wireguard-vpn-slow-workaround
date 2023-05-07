@@ -4,6 +4,7 @@
 # Setup
 - Arch Linux (Kernel: 6.3.1-arch1-1)
 - Surfshark Wireguard VPN (Manual Connection)
+- Possibly similar to Nordvpn Nordlynx
 - Router: Asus RT-AC68U (Firmware: Asuswrt-Merlin Asus386.10)
 - Router is NAT only. Neither Wireguard Endpoint nor Client is at the Router
 
@@ -49,7 +50,7 @@ import time
 inf = sys.argv[1] #Network Interface (eg: eth0)
 netevent = sys.argv[2] #Event (eg: up, pre-up)
 
-if (sys.argv[1].startswith("wireguard_") and netevent == "up"):
+if (inf.startswith("wireguard_") and netevent == "up"):
     time.sleep(5)
     subprocess.call(["ssh", "-i", "/my/ssh/privatekey", "routeruser@192.168.1.1", "-t","-o", "StrictHostKeyChecking no", "conntrack -D conntrack -p udp -s 192.168.1.10 --dport 51820;"])
 ```
